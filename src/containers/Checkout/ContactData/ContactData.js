@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.css';
 import axios from '../../../axios-orders';
@@ -103,8 +105,8 @@ class ContactData extends Component{
 			formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier];
 		}
 		const order = {
-			ingredients: this.state.ingredients, 
-			price: this.state.price, 
+			ingredients: this.props.ings, 
+			price: this.props.price, 
 			orderData: formData
 		};
 		axios.post('/orders.json', order)
@@ -132,7 +134,6 @@ class ContactData extends Component{
 		if(rules.maxLength){
 			isValid = value.length <= rules.maxLength && isValid;
 		}
-		console.log(isValid);
 		return isValid;
 	}
 
@@ -189,5 +190,11 @@ class ContactData extends Component{
 		);
 	}
 }
+const mapStateToProps = (state) => {
+ 	return {
+ 		ings: state.ingredients, 
+ 		price: state.totalPrice
+ 	};
+};
 
-export default ContactData;
+export default connect(mapStateToProps)(ContactData);
